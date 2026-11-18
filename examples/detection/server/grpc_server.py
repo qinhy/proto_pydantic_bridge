@@ -1,21 +1,27 @@
 """Native gRPC detection server.
 
-Run: python examples/detection/grpc_server.py --host 127.0.0.1 --port 50051
+Run: python examples/detection/server/grpc_server.py --host 127.0.0.1 --port 50051
 """
 from __future__ import annotations
 
 import argparse
 from concurrent import futures
 import logging
+from pathlib import Path
+import sys
 
 import grpc
 
-from bridge_models import Detection, DetectionResponse
-from detection_pb2_grpc import (
+_ROOT = str(Path(__file__).resolve().parents[1])
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
+from protocol.detection_pb2 import Detection, DetectionResponse
+from protocol.detection_pb2_grpc import (
     DetectionServiceServicer,
     add_DetectionServiceServicer_to_server,
 )
-from processing import InvalidDetection, process_detection
+from algorithm.processing import InvalidDetection, process_detection
 
 log = logging.getLogger(__name__)
 

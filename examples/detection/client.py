@@ -1,21 +1,28 @@
 """CLI for the native gRPC server (and optional FastAPI HTTP endpoint).
 
 Examples:
-  python examples/detection/grpc_client.py --class-id 3 --confidence 0.95
-  python examples/detection/grpc_client.py --transport http --backend grpc
+  python examples/detection/client/grpc_client.py --class-id 3 --confidence 0.95
+  python examples/detection/client/grpc_client.py --transport http --backend grpc
 """
 from __future__ import annotations
 
 import argparse
 import json
+from pathlib import Path
 import sys
 from urllib import error, request as urllib_request
 from urllib.parse import urlencode
 
 import grpc
 
-from bridge_models import Detection, DetectionResponse
-from detection_pb2_grpc import DetectionServiceStub
+_ROOT = str(Path(__file__).resolve().parents[1])
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
+# fastapi_models
+from protocol.detection_pb2 import Detection, DetectionResponse
+
+from protocol.detection_pb2_grpc import DetectionServiceStub
 
 
 def call_grpc(message: Detection, *, target: str = "127.0.0.1:50051", timeout: float = 3) -> DetectionResponse:

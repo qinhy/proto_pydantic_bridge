@@ -38,3 +38,6 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_DETECTIONSERVICE']._serialized_start=226
   _globals['_DETECTIONSERVICE']._serialized_end=302
 # @@protoc_insertion_point(module_scope)
+
+from proto_pydantic_bridge import register_many
+register_many(Detection, DetectionResponse)

@@ -1,7 +1,15 @@
 """Shows that both generated request and response support Pydantic APIs."""
+from pathlib import Path
+import sys
+
 from pydantic import BaseModel, TypeAdapter
 
-from bridge_models import Detection, DetectionResponse
+_ROOT = str(Path(__file__).resolve().parents[1])
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
+
+from protocol.detection_pb2 import Detection, DetectionResponse
 
 
 class Exchange(BaseModel):

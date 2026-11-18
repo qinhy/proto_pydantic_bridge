@@ -1,6 +1,6 @@
 """Integration tests for the detection example.
 
-Run from repository root: pytest -q examples/detection/test_demo.py
+Run from repository root: pytest -q examples/detection/tests/test_demo.py
 """
 from __future__ import annotations
 
@@ -14,10 +14,14 @@ import pytest
 from fastapi.testclient import TestClient
 from pydantic import BaseModel, TypeAdapter
 
-from bridge_models import Detection, DetectionResponse
-from fastapi_server import app
-from grpc_client import call_grpc, call_http
-from grpc_server import start_server
+_ROOT = str(Path(__file__).resolve().parents[1])
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
+from client import call_grpc, call_http
+from protocol.detection_pb2 import Detection, DetectionResponse
+from server.fastapi_server import app
+from server.grpc_server import start_server
 
 
 @pytest.fixture
@@ -114,7 +118,7 @@ def test_local_and_grpc_domain_errors(monkeypatch, server):
 
 
 def test_real_cli_grpc(server):
-    location = Path(__file__).with_name("grpc_client.py")
+    location = Path(__file__).resolve().parents[1] / "client.py"
     command = [sys.executable, str(location), "--target", server, "--class-id", "7"]
     result = subprocess.run(command, capture_output=True, text=True, timeout=12)
     assert result.returncode == 0, result.stderr
@@ -124,7 +128,7 @@ def test_real_cli_grpc(server):
 
 def test_http_client_converts_response_to_native_protobuf(monkeypatch):
     """Test the urllib HTTP client path without opening a separate HTTP port."""
-    import grpc_client
+    import client
 
     class FakeHTTPResponse:
         def __enter__(self):
@@ -140,7 +144,7 @@ def test_http_client_converts_response_to_native_protobuf(monkeypatch):
         assert json.loads(req.data)["class_id"] == 5
         return FakeHTTPResponse()
 
-    monkeypatch.setattr(grpc_client.urllib_request, "urlopen", fake_urlopen)
+    monkeypatch.setattr(client.urllib_request, "urlopen", fake_urlopen)
     res = call_http(request(5))
     assert type(res) is DetectionResponse
     assert type(res.detections[0]) is Detection

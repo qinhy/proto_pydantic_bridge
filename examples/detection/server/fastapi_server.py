@@ -1,20 +1,27 @@
 """FastAPI with a native protobuf request and native protobuf response.
 
-Run: uvicorn fastapi_server:app --app-dir examples/detection --port 8000
+Run: uvicorn server.fastapi_server:app --app-dir examples/detection --port 8000
 Try: http://127.0.0.1:8000/docs
 """
 from __future__ import annotations
 
 import os
-from typing import Literal
+from pathlib import Path
+import sys
+from typing import Annotated, Literal
 
 import grpc
 from fastapi import Body, FastAPI, HTTPException, Query
 
+_ROOT = str(Path(__file__).resolve().parents[1])
+if _ROOT not in sys.path:
+    sys.path.insert(0, _ROOT)
+
 # Imports/registers Pydantic core schemas BEFORE FastAPI inspects signatures.
-from bridge_models import Detection, DetectionResponse
-from detection_pb2_grpc import DetectionServiceStub
-from processing import InvalidDetection, process_detection
+from protocol.detection_pb2 import Detection, DetectionResponse
+
+from protocol.detection_pb2_grpc import DetectionServiceStub
+from algorithm.processing import InvalidDetection, process_detection
 
 app = FastAPI(
     title="Detection: native Protobuf + Pydantic + FastAPI + gRPC",
@@ -31,10 +38,11 @@ def health():
 @app.post("/detect", response_model=DetectionResponse, tags=["detection"])
 def detect(
     request: Detection = Detection(**{
-                "class_id": 3,
-                "confidence": 0.95,
-                "bbox": [ 10.0, 20.0, 100.0, 200.0],
-                "image_id": "cam-001"}),
+                                    "class_id": 3,
+                                    "confidence": 0.95,
+                                    "bbox": [10, 20, 100, 200],
+                                    "image_id": "cam-001"
+                                    }),
     backend: Literal["local", "grpc"] = Query("local", description="Handle here or forward original protobuf to gRPC"),
 ) -> DetectionResponse:
     """FastAPI validates ProtoJSON then receives the original native protobuf object."""

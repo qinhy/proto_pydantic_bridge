@@ -6,7 +6,7 @@ from __future__ import annotations
 
 import math
 
-from bridge_models import Detection, DetectionResponse
+from protocol.detection_pb2 import Detection, DetectionResponse
 
 
 class InvalidDetection(ValueError):
@@ -16,7 +16,7 @@ class InvalidDetection(ValueError):
 def process_detection(request: Detection, *, processed_by: str) -> DetectionResponse:
     """Return a native protobuf response, preserving all request values."""
     if not isinstance(request, Detection):
-        raise TypeError("request must be the native detection_pb2.Detection")
+        raise TypeError("request must be the native protocol.detection_pb2.Detection")
     if request.class_id < 0:
         raise InvalidDetection("class_id must be >= 0")
     if not math.isfinite(request.confidence) or not 0 <= request.confidence <= 1:
