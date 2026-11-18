@@ -6,6 +6,16 @@ from typing import ClassVar as _ClassVar, Optional as _Optional, Union as _Union
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class DetectionServerConfig(_message.Message):
+    __slots__ = ("host", "grpc_port", "fastapi_port")
+    HOST_FIELD_NUMBER: _ClassVar[int]
+    GRPC_PORT_FIELD_NUMBER: _ClassVar[int]
+    FASTAPI_PORT_FIELD_NUMBER: _ClassVar[int]
+    host: str
+    grpc_port: int
+    fastapi_port: int
+    def __init__(self, host: _Optional[str] = ..., grpc_port: _Optional[int] = ..., fastapi_port: _Optional[int] = ...) -> None: ...
+
 class Detection(_message.Message):
     __slots__ = ("class_id", "confidence", "bbox", "image_id")
     CLASS_ID_FIELD_NUMBER: _ClassVar[int]

@@ -1,4 +1,4 @@
-"""Run the detection example's gRPC and FastAPI servers together."""
+"""Run gRPC and FastAPI servers together."""
 
 import logging
 
@@ -6,14 +6,15 @@ import uvicorn
 
 from server.fastapi_server import app
 from server.grpc_server import start_server
-
+from protocol.detection_pb2 import DetectionServerConfig
 
 def main() -> None:
     logging.basicConfig(level=logging.INFO, format="%(levelname)s %(message)s")
-    grpc_server, port = start_server()
+    config = DetectionServerConfig()
+    grpc_server, port = start_server(host=config.host, port=config.grpc_port)
     try:
-        logging.info("gRPC listening on 127.0.0.1:%d", port)
-        uvicorn.run(app, host="127.0.0.1", port=8000)
+        logging.info(f"gRPC listening on {config.host}:{port}")
+        uvicorn.run(app, host=config.host, port=config.fastapi_port)
     except KeyboardInterrupt:
         pass
     finally:

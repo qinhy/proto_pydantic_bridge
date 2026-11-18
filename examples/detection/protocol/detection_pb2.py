@@ -24,20 +24,22 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x64\x65tection.proto\x12\x07\x65xample\"Q\n\tDetection\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\x05\x12\x12\n\nconfidence\x18\x02 \x01(\x02\x12\x0c\n\x04\x62\x62ox\x18\x03 \x03(\x02\x12\x10\n\x08image_id\x18\x04 \x01(\t\"q\n\x11\x44\x65tectionResponse\x12&\n\ndetections\x18\x01 \x03(\x0b\x32\x12.example.Detection\x12\r\n\x05total\x18\x02 \x01(\x05\x12\x14\n\x0cprocessed_by\x18\x03 \x01(\t\x12\x0f\n\x07message\x18\x04 \x01(\t2L\n\x10\x44\x65tectionService\x12\x38\n\x06\x44\x65tect\x12\x12.example.Detection\x1a\x1a.example.DetectionResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0f\x64\x65tection.proto\x12\x07\x65xample\"f\n\x15\x44\x65tectionServerConfig\x12\x17\n\x04host\x18\x01 \x01(\t:\t127.0.0.1\x12\x18\n\tgrpc_port\x18\x02 \x01(\r:\x05\x35\x30\x30\x35\x31\x12\x1a\n\x0c\x66\x61stapi_port\x18\x03 \x01(\r:\x04\x38\x30\x30\x30\"Q\n\tDetection\x12\x10\n\x08\x63lass_id\x18\x01 \x01(\x05\x12\x12\n\nconfidence\x18\x02 \x01(\x02\x12\x0c\n\x04\x62\x62ox\x18\x03 \x03(\x02\x12\x10\n\x08image_id\x18\x04 \x01(\t\"q\n\x11\x44\x65tectionResponse\x12&\n\ndetections\x18\x01 \x03(\x0b\x32\x12.example.Detection\x12\r\n\x05total\x18\x02 \x01(\x05\x12\x14\n\x0cprocessed_by\x18\x03 \x01(\t\x12\x0f\n\x07message\x18\x04 \x01(\t2L\n\x10\x44\x65tectionService\x12\x38\n\x06\x44\x65tect\x12\x12.example.Detection\x1a\x1a.example.DetectionResponseb\x08\x65\x64itionsp\xe9\x07')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'detection_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_DETECTION']._serialized_start=28
-  _globals['_DETECTION']._serialized_end=109
-  _globals['_DETECTIONRESPONSE']._serialized_start=111
-  _globals['_DETECTIONRESPONSE']._serialized_end=224
-  _globals['_DETECTIONSERVICE']._serialized_start=226
-  _globals['_DETECTIONSERVICE']._serialized_end=302
+  _globals['_DETECTIONSERVERCONFIG']._serialized_start=28
+  _globals['_DETECTIONSERVERCONFIG']._serialized_end=130
+  _globals['_DETECTION']._serialized_start=132
+  _globals['_DETECTION']._serialized_end=213
+  _globals['_DETECTIONRESPONSE']._serialized_start=215
+  _globals['_DETECTIONRESPONSE']._serialized_end=328
+  _globals['_DETECTIONSERVICE']._serialized_start=330
+  _globals['_DETECTIONSERVICE']._serialized_end=406
 # @@protoc_insertion_point(module_scope)
 
 from proto_pydantic_bridge import register_many
-register_many(Detection, DetectionResponse)
+register_many(DetectionServerConfig, Detection, DetectionResponse)

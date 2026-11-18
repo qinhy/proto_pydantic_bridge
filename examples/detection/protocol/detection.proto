@@ -1,7 +1,12 @@
-syntax = "proto3";
+edition = "2024";
 
 package example;
 
+message DetectionServerConfig {
+  string host = 1 [default = "127.0.0.1"];
+  uint32 grpc_port = 2 [default = 50051];
+  uint32 fastapi_port = 3 [default = 8000];
+}
 // The SAME request is used by gRPC and FastAPI.
 message Detection {
   int32 class_id = 1;
