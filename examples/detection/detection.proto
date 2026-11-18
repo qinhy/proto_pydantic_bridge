@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package example;
+
+// The SAME request is used by gRPC and FastAPI.
+message Detection {
+  int32 class_id = 1;
+  float confidence = 2;
+  repeated float bbox = 3;  // Optional [x1, y1, x2, y2].
+  string image_id = 4;
+}
+
+// The SAME native protobuf response is returned by both transports.
+message DetectionResponse {
+  repeated Detection detections = 1;
+  int32 total = 2;
+  string processed_by = 3;  // "grpc" or "fastapi".
+  string message = 4;
+}
+
+service DetectionService {
+  rpc Detect(Detection) returns (DetectionResponse);
+}
